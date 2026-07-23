@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co-Operação: Congresso Nacional</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes Clássicas e Sofisticadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #060a12; /* Grafite institucional escuro e profundo */
+            color: #e2e8f0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.85) 0%, #060a12 100%);
+            background-attachment: fixed;
+        }
+
+        .title-classic {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
+        }
+
+        /* Molduras Clássicas Administrativas */
+        .panel-classic {
+            background: rgba(11, 17, 30, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* Botão Tradicional de Painel Governamental */
+        .btn-classic-gavel {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: #f8fafc;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-classic-gavel:hover:not(:disabled) {
+            border-color: #d97706; /* Detalhe em bronze/ouro */
+            background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+            box-shadow: 0 4px 20px rgba(217, 119, 6, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-classic-gavel:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        /* Abas Estilo Gabinete */
+        .tab-classic {
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .tab-classic.active {
+            border-bottom-color: #d97706; /* Ouro tradicional */
+            color: #f59e0b;
+        }
+
+        /* Indicador de Painel de Votos */
+        .segmented-bar {
+            background: #090e18;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            padding: 3px;
+            border-radius: 6px;
+        }
+        
+        .bar-segment {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            transition: width 0.4s cubic-bezier(0.1, 0.8, 0.1, 1);
+            border-radius: 3px;
+        }
+
+        /* Controle Suave e Transição dos Indicadores de Votação */
+        .seat-indicator {
+            transition: opacity 0.4s ease-in-out, fill 0.3s ease;
+            opacity: 1;
+        }
+        .hide-indicators .seat-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Scrollbar limpa */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a12; }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d97706; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500/20 selection:text-white">
+
+    <header class="border-b border-slate-800 bg-[#060a12]/95 backdrop-blur-md sticky top-0 z-50 px-4 md:px-8 py-4">
+        <div class="max-w-[1600px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+            <!-- Logo e Título Clássico -->
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-1.5 bg-amber-600 shadow-[0_0_12px_rgba(217,119,6,0.45)]"></div>
+                <div>
+                    <h1 class="text-lg font-bold title-classic text-slate-100 flex items-center gap-2">
+                        CO-OPERAÇÃO
+                    </h1>
+                    <span class="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase">Mapeamento Visual e Geopolítico do Congresso Nacional</span>
+                </div>
+            </div>
+
+            <!-- Navegação Ativa Simplificada (Apenas Visualização e Simulação) -->
+            <div class="flex items-center gap-6 text-xs font-bold">
+                <button onclick="switchTab('visualizacao')" id="tab-visualizacao" class="tab-classic active px-2 py-1.5 uppercase tracking-wider text-slate-400 hover:text-slate-100">Visualização</button>
+                <button onclick="switchTab('simulacao')" id="tab-simulacao" class="tab-classic px-2 py-1.5 uppercase tracking-wider text-slate-400 hover:text-slate-100">Simulação</button>
+            </div>
+
+            <!-- Seleção de Casa / Câmaras -->
+            <div class="flex items-center gap-2 bg-slate-950 p-1 border border-slate-800 rounded-md">
+                <button id="btn-camara" onclick="switchHouse('camara')" class="px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all bg-slate-800 border border-slate-700 text-amber-500 shadow-sm">
+                    CÂMARA <span class="bg-black/40 text-slate-300 px-2 py-0.5 rounded ml-1 text-[10px] font-mono">513</span>
+                </button>
+                <button id="btn-senado" onclick="switchHouse('senado')" class="px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all text-slate-450 hover:text-white">
+                    SENADO <span class="bg-black/40 text-slate-500 px-2 py-0.5 rounded ml-1 text-[10px] font-mono">81</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sistema de Avisos Flutuantes -->
+    <div id="toast-container" class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 flex flex-col gap-6 relative">
+        
+        <!-- TELA DO PLENÁRIO (SEÇÃO CENTRAL DO PLENÁRIO) -->
+        <div id="view-plenary" class="flex flex-col gap-6">
+            <section class="panel-classic p-4 md:p-6 flex flex-col min-h-[680px] justify-between relative overflow-hidden">
+                
+                <!-- Linhas de Divisão Geopolítica Leves e Clássicas -->
+                <div class="absolute top-8 inset-x-0 flex justify-between px-16 md:px-48 pointer-events-none text-slate-500/10 text-[10px] uppercase tracking-[15px] font-bold z-10">
+                    <span>Ala Esquerda</span>
+                    <span>Espectro Moderado</span>
+                    <span>Ala Direita</span>
+                </div>
+
+                <!-- Detalhes Superiores do Painel -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/60 pb-4 z-10">
+                    <div>
+                        <span id="plenary-subtitle" class="text-[9px] font-bold tracking-[3px] text-amber-600 uppercase">Geopolítica Institucional Real</span>
+                        <h2 id="plenary-title" class="text-xl font-bold text-slate-100 uppercase tracking-wider title-classic">Plenário Ulysses Guimarães</h2>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <!-- Painel de Som Ambiente e Controle de Reinicialização -->
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 border border-slate-800 rounded">
+                                <i class="fa-solid fa-volume-high text-amber-500 text-xs cursor-pointer transition hover:text-amber-400" onclick="toggleMuteMurmur()" id="volume-icon"></i>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">SOM</span>
+                            </div>
+                            <button onclick="resetPlenaryState()" class="flex items-center gap-1.5 bg-slate-950 px-3 py-1.5 border border-slate-800 rounded text-[10px] text-slate-400 uppercase tracking-wider font-bold hover:text-amber-500 hover:border-amber-500/40 transition">
+                                <i class="fa-solid fa-rotate-left text-amber-500"></i>
+                                <span>REINICIAR VOTAÇÃO</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Representação Vetorial Espaçada do Hemiciclo -->
+                <div class="flex-1 flex items-center justify-center my-4 overflow-hidden relative min-h-[480px]">
+                    <div class="w-full max-w-[1250px] aspect-[16/9] relative">
+                        <svg id="plenary-svg" viewBox="0 0 1200 700" class="w-full h-full select-none" onclick="handleSvgBackgroundClick(event)">
+                            <defs>
+                                <!-- Gradientes Nobres para Madeira e Acabamentos -->
+                                <linearGradient id="wood-desk" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#1e110b"/>
+                                    <stop offset="50%" stop-color="#3b2416"/>
+                                    <stop offset="100%" stop-color="#1e110b"/>
+                                </linearGradient>
+                                
+                                <filter id="glow-led">
+                                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <!-- Arcos Guia Conectando as Alas Geográficas -->
+                            <path d="M 120,600 Q 600,60 1080,600" stroke="rgba(148, 163, 184, 0.03)" stroke-width="3" fill="none" />
+
+                            <!-- Divisórias Geopolíticas Súteis (Sinalização Clássica e Limpa) -->
+                            <g id="geopolitical-separators" stroke="rgba(148, 163, 184, 0.06)" stroke-width="1.5" stroke-dasharray="6 14">
+                                <!-- Esquerda / Centro -->
+                                <line x1="600" y1="610" x2="300" y2="40" />
+                                <!-- Centro / Direita -->
+                                <line x1="600" y1="610" x2="900" y2="40" />
+                            </g>
+
+                            <!-- Mesa Diretora Clássica Redimensionada e Afastada -->
+                            <g id="mesa-diretora" transform="translate(600, 660)">
+                                <!-- Base de Madeira Nobre e Filete de Bronze Menores -->
+                                <path d="M -130,-20 L 130,-20 L 100,10 L -100,10 Z" fill="url(#wood-desk)" stroke="#503524" stroke-width="1.2" />
+                                <path d="M -130,-20 L 130,-20" stroke="#d97706" stroke-width="1.2" />
+                                <text x="0" y="-4" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="middle" letter-spacing="3">MESA DIRETORA</text>
+                                
+                                <!-- Cadeira do Presidente do Congresso (Atrás da mesa) -->
+                                <g id="chair-pres" transform="translate(0, 15)" class="cursor-pointer select-none">
+                                    <path d="M -8,11 L -8,-6 Q -8,-10 0,-10 Q 8,-10 8,-6 L 8,11 Z" fill="#2d1305" stroke="#d97706" stroke-width="1.2" />
+                                    <rect x="-6" y="-3" width="12" height="12" rx="1.5" fill="#54250c" />
+                                    <circle cx="0" cy="-2" r="2.8" fill="#f8fafc" /> <!-- Representação Presidencial -->
+                                </g>
+
+                                <!-- Cadeira do Secretário 1 -->
+                                <g id="chair-sec1" transform="translate(-35, 14)" class="cursor-pointer select-none">
+                                    <path d="M -6,9 L -6,-5 Q -6,-8 0,-8 Q 6,-8 6,-5 L 6,9 Z" fill="#2d1305" stroke="#94a3b8" stroke-width="1" />
+                                    <rect x="-5" y="-2" width="10" height="10" rx="1" fill="#54250c" />
+                                    <circle cx="0" cy="-2" r="2" fill="#cbd5e1" />
+                                </g>
+
+                                <!-- Cadeira do Secretário 2 -->
+                                <g id="chair-sec2" transform="translate(35, 14)" class="cursor-pointer select-none">
+                                    <path d="M -6,9 L -6,-5 Q -6,-8 0,-8 Q 6,-8 6,-5 L 6,9 Z" fill="#2d1305" stroke="#94a3b8" stroke-width="1" />
+                                    <rect x="-5" y="-2" width="10" height="10" rx="1" fill="#54250c" />
+                                    <circle cx="0" cy="-2" r="2" fill="#cbd5e1" />
+                                </g>
+                            </g>
+
+                            <!-- Tribuna de Oradores Esquerda (Afastada das Cadeiras) -->
+                            <g id="tribuna-oradores" transform="translate(380, 640)">
+                                <circle cx="0" cy="0" r="18" fill="#0f172a" stroke="#475569" stroke-width="1.5" />
+                                <path d="M -12,-3 L 12,-3 L 8,8 L -8,8 Z" fill="url(#wood-desk)" stroke="#503524" stroke-width="1" />
+                                <text x="0" y="-8" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="middle" letter-spacing="1">TRIBUNA</text>
+                                <circle cx="0" cy="1" r="3" fill="#e2e8f0" /> <!-- Orador ativo -->
+                            </g>
+
+                            <!-- Contêiner de Assentos de Parlamento Único -->
+                            <g id="seats-container"></g>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARD DE DETALHES DO PARLAMENTAR SELECIONADO (Exclusivo Modo Visualização) -->
+            <div id="details-card-container" class="panel-classic p-6 flex flex-col md:flex-row gap-6 items-center justify-between transition-all duration-300 hidden">
+                <div class="flex items-center gap-5 w-full md:w-auto">
+                    <!-- Moldura Estilizada de Foto -->
+                    <div class="flex-shrink-0 w-20 h-24 border border-slate-700 rounded-lg bg-slate-900 flex items-center justify-center text-slate-500 overflow-hidden relative shadow-lg">
+                        <i class="fa-solid fa-user text-4xl text-slate-600"></i>
+                        <div id="details-bar" class="absolute bottom-0 inset-x-0 h-2 bg-amber-600"></div>
+                    </div>
+                    <!-- Informações -->
+                    <div class="flex-1 space-y-1">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h3 id="det-name" class="text-lg font-bold text-slate-100 title-classic">Parlamentar Selecionado</h3>
+                            <span id="det-uf" class="bg-slate-950 border border-slate-800 text-amber-500 px-2 py-0.5 rounded text-[10px] font-mono font-bold">UF</span>
+                        </div>
+                        <p id="det-party" class="text-sm font-semibold text-amber-500">Selecione uma cadeira para inspecionar</p>
+                        <div class="flex items-center gap-4 text-xs text-slate-400">
+                            <span>Espectro: <strong id="det-spectrum" class="text-slate-300 uppercase font-bold">-</strong></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                            <span>Situação: <strong id="det-status" class="text-slate-300 uppercase font-bold">-</strong></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 w-full md:w-auto">
+                    <button id="det-action-btn" onclick="openParliamentaryProfile()" class="w-full md:w-auto btn-classic-gavel px-6 py-3 rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                        <span>Acessar detalhes do parlamentar</span>
+                        <i class="fa-solid fa-address-card text-[10px]"></i>
+                    </button>
+                    <button onclick="clearSelectedDelegate()" class="bg-slate-950 border border-slate-850 hover:bg-slate-900 text-slate-400 hover:text-white p-3 rounded text-xs" title="Desmarcar">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAINÉIS DE CONTEÚDO E CONTROLES (Ocultados na aba de visualização limpa) -->
+            <div id="bottom-controls-panel" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch hidden">
+                
+                <!-- COLUNA PRINCIPAL DA ABA SELECIONADA -->
+                <div class="lg:col-span-8 flex flex-col">
+                    <div class="panel-classic p-6 flex flex-col justify-between h-full min-h-[320px] gap-6">
+                        
+                        <!-- CONTEÚDO DA ABA: SIMULAÇÃO -->
+                        <div id="content-simulacao" class="tab-pane space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-gavel text-amber-500"></i>
+                                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">Simulador Legislativo em Tempo Real</h3>
+                                </div>
+                                <span id="system-status-indicator" class="text-[9px] bg-slate-950 text-slate-400 border border-slate-800 px-2.5 py-0.5 rounded font-mono">STAND-BY</span>
+                            </div>
+
+                            <!-- Escolha de Pauta / Projeto -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1.5">Diretriz Legislativa Ativa:</label>
+                                    <select id="pauta-select" onchange="loadPautaData()" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500 transition">
+                                        <option value="reforma">Reforma Tributária Brasileira (PEC)</option>
+                                        <option value="arcabouco">Regras de Sustentabilidade Fiscal (PLP)</option>
+                                        <option value="seguranca">Estratégia Nacional de Segurança Pública (PL)</option>
+                                        <option value="sustentavel">Preservação Industrial Ecológica (PL)</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex flex-col justify-center">
+                                    <span class="text-[9px] text-amber-500 uppercase tracking-widest font-bold">Impacto Previsto:</span>
+                                    <p id="pauta-desc" class="text-[10.5px] text-slate-400 mt-1 italic leading-relaxed">Carregando dados da diretriz...</p>
+                                </div>
+                            </div>
+
+                            <!-- Orientação de Força Partidária por Espectro -->
+                            <div class="grid grid-cols-3 gap-3 text-[10px]" id="spectrum-orientations-hud">
+                                <!-- Esquerda -->
+                                <div class="bg-rose-950/10 border border-rose-900/20 p-2.5 rounded">
+                                    <div class="flex justify-between items-center text-rose-400 mb-1 font-bold uppercase tracking-wider">
+                                        <span>ALA ESQUERDA</span>
+                                        <span id="stance-esq" class="bg-rose-950 text-rose-400 px-1 rounded text-[8px]">FAVOR</span>
+                                    </div>
+                                    <span class="text-slate-500 text-[9px]">Sinalização clássica do bloco de esquerda.</span>
+                                </div>
+                                <!-- Centro -->
+                                <div class="bg-yellow-950/10 border border-yellow-900/20 p-2.5 rounded">
+                                    <div class="flex justify-between items-center text-yellow-500 mb-1 font-bold uppercase tracking-wider">
+                                        <span>ALA CENTRÃO</span>
+                                        <span id="stance-cen" class="bg-yellow-950 text-yellow-450 px-1 rounded text-[8px]">DIVIDIDO</span>
+                                    </div>
+                                    <span class="text-slate-500 text-[9px]">Negociação dependente de emendas parlamentares.</span>
+                                </div>
+                                <!-- Direita -->
+                                <div class="bg-blue-950/10 border border-blue-900/20 p-2.5 rounded">
+                                    <div class="flex justify-between items-center text-blue-400 mb-1 font-bold uppercase tracking-wider">
+                                        <span>ALA DIREITA</span>
+                                        <span id="stance-dir" class="bg-blue-950 text-blue-400 px-1 rounded text-[8px]">CONTRA</span>
+                                    </div>
+                                    <span class="text-slate-500 text-[9px]">Pauta em liberdade de mercado e redução fiscal.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botão Alavanca de Voto e Placar de Resultados -->
+                        <div id="simulation-trigger-bar" class="flex flex-col md:flex-row gap-6 items-center border-t border-slate-800/80 pt-4">
+                            
+                            <!-- Painel de Disparo de Votos -->
+                            <div class="flex flex-col items-center gap-2">
+                                <button onclick="startVotacaoProcess()" id="btn-fire-vote" class="btn-classic-gavel px-10 py-4 rounded text-xs font-bold uppercase tracking-widest w-full md:w-auto min-w-[220px]">
+                                    <i class="fa-solid fa-fingerprint mr-2"></i> INICIAR VOTAÇÃO
+                                </button>
+                                <button onclick="resetPlenaryState()" class="text-[9px] text-slate-500 uppercase tracking-widest hover:text-amber-500 transition">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reiniciar Plenário
+                                </button>
+                            </div>
+
+                            <!-- Progresso Digital de Votação (Placar) -->
+                            <div class="flex-1 w-full space-y-3">
+                                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                    <div class="bg-slate-950/80 border border-slate-850 p-2.5 rounded">
+                                        <span class="text-emerald-400 block text-[10px] uppercase font-bold tracking-wider">A FAVOR</span>
+                                        <span id="score-yes" class="text-lg font-bold text-slate-100">0</span>
+                                    </div>
+                                    <div class="bg-slate-950/80 border border-slate-850 p-2.5 rounded">
+                                        <span class="text-rose-400 block text-[10px] uppercase font-bold tracking-wider">CONTRA</span>
+                                        <span id="score-no" class="text-lg font-bold text-slate-100">0</span>
+                                    </div>
+                                    <div class="bg-slate-950/80 border border-slate-850 p-2.5 rounded">
+                                        <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">ABSTENÇÕES</span>
+                                        <span id="score-abstain" class="text-lg font-bold text-slate-100">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- Barra de Progresso Realista -->
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-[9px] text-slate-400 uppercase font-semibold tracking-wider">
+                                        <span>Maioria Requerida: <span id="majority-goal-lbl" class="text-amber-500">257</span> votos</span>
+                                        <span>Votos Computados: <span id="quorum-calc" class="text-slate-300">0/513</span></span>
+                                    </div>
+                                    <div class="segmented-bar h-3.5">
+                                        <div id="yes-bar" class="bar-segment" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAINEL LATERAL DE DETALHES -->
+                <div class="lg:col-span-4 flex flex-col gap-6">
+                    
+                    <!-- Didática de Regras Reais do Congresso -->
+                    <div class="panel-classic p-5 flex flex-col gap-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-500 flex items-center gap-1.5">
+                            <i class="fa-solid fa-gavel"></i> Diferenças Regionais & Ideológicas
+                        </h3>
+                        <div class="text-[11px] text-slate-400 leading-relaxed space-y-2">
+                            <p id="rule-desc">
+                                <strong>Câmara dos Deputados:</strong> Não possui poltronas fixas nominais. Os deputados se assentam informalmente sob uma lógica de espectro partidário (Esquerda &rarr; Centro &rarr; Direita).
+                            </p>
+                            <p class="border-t border-slate-800 pt-2 text-slate-500">
+                                <strong>Visualização Clássica:</strong> Esta plataforma reproduz de forma precisa a localização espacial tradicional de cada força política dentro das dependências do Congresso.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TELA DETALHADA DO PARLAMENTAR (ESTILO DOSSIÊ EXCLUSIVO) -->
+        <div id="view-parliamentary-profile" class="hidden flex flex-col gap-6">
+            <div class="panel-classic p-6 md:p-8 flex flex-col gap-8 relative overflow-hidden">
+                <!-- Botão Flutuante Voltar -->
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-6">
+                    <button onclick="closeParliamentaryProfile()" class="flex items-center gap-2 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded px-4 py-2 text-xs font-bold uppercase tracking-wider text-amber-500 transition shadow-sm">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span>Voltar ao Plenário</span>
+                    </button>
+                    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Dossiê de Atividade e Recursos</span>
+                </div>
+
+                <!-- Informações Principais do Perfil -->
+                <div class="flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-start">
+                    <!-- Moldura Técnica de Foto -->
+                    <div class="flex-shrink-0 w-32 h-40 border border-slate-700 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 relative overflow-hidden shadow-2xl">
+                        <i class="fa-solid fa-user text-6xl"></i>
+                        <div id="profile-party-stripe" class="absolute bottom-0 inset-x-0 h-3 bg-amber-500"></div>
+                    </div>
+                    
+                    <div class="flex-1 space-y-4 text-center md:text-left">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-1">
+                                <h2 id="prof-name" class="text-2xl md:text-3xl font-bold title-classic text-slate-100">Parlamentar</h2>
+                                <span id="prof-uf" class="bg-slate-950 border border-slate-800 text-amber-500 px-3 py-1 rounded text-xs font-mono font-bold">UF</span>
+                            </div>
+                            <p id="prof-party" class="text-md font-semibold text-amber-500">Partido Político</p>
+                        </div>
+
+                        <div class="flex flex-wrap justify-center md:justify-start gap-6 text-xs text-slate-400">
+                            <span>Espectro Político: <strong id="prof-spectrum" class="text-slate-200 uppercase font-bold">-</strong></span>
+                            <span class="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-slate-700 self-center"></span>
+                            <span>Situação: <strong id="prof-status" class="text-emerald-400 uppercase font-bold">Em Exercício</strong></span>
+                            <span class="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-slate-700 self-center"></span>
+                            <span>Presença em Sessões: <strong class="text-slate-200 font-bold">96.4%</strong></span>
+                        </div>
+
+                        <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">
+                            Dados integrados diretamente do banco de dados institucional. O gráfico abaixo indica a destinação orçamentária de emendas impositivas e o histórico pessoal de votações em reformas cruciais.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Divisão de Detalhes em Colunas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4 border-t border-slate-800/60">
+                    
+                    <!-- Emendas Parlamentares -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-500 flex items-center gap-2">
+                            <i class="fa-solid fa-wallet"></i> Alocação de Emendas Parlamentares (Exercício Corrente)
+                        </h3>
+                        <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 space-y-5">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-slate-400">Total de Verbas Alocadas:</span>
+                                <span id="prof-total-budget" class="font-bold text-slate-100 text-lg">R$ 0,00M</span>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Saúde -->
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                                        <span>Saúde Pública e Atenção Básica</span>
+                                        <span id="prof-budget-health-val" class="text-emerald-400">R$ 0,0M</span>
+                                    </div>
+                                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                                        <div id="prof-budget-health-bar" class="h-full bg-emerald-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Educação -->
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                                        <span>Desenvolvimento de Educação Básica</span>
+                                        <span id="prof-budget-edu-val" class="text-amber-500">R$ 0,0M</span>
+                                    </div>
+                                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                                        <div id="prof-budget-edu-bar" class="h-full bg-amber-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Infraestrutura -->
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                                        <span>Infraestrutura Urbana e Saneamento</span>
+                                        <span id="prof-budget-infra-val" class="text-blue-400">R$ 0,0M</span>
+                                    </div>
+                                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                                        <div id="prof-budget-infra-bar" class="h-full bg-blue-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histórico de Votos -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-500 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> Histórico em Deliberações de Alta Relevância
+                        </h3>
+                        <div id="prof-vote-history-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Gerado dinamicamente via JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Clássico -->
+    <footer class="border-t border-slate-900 bg-[#060a12] py-4 px-6 text-center text-[10px] text-slate-500 tracking-wider font-bold">
+        CONGRESSO NACIONAL BRASILEIRO • SISTEMA DIGITAL DE OPERAÇÕES • 2026
+    </footer>
+
+    <!-- Tooltip Flutuante Estabilizado com Moldura e Foto do Parlamentar -->
+    <div id="hud-tooltip" class="absolute pointer-events-none bg-[#090e18]/95 border border-slate-700 text-slate-200 rounded p-3 text-[10px] shadow-2xl hidden z-50 flex flex-col gap-2 min-w-[280px]">
+        <!-- Conteúdo Principal -->
+        <div class="flex flex-row gap-3">
+            <!-- Moldura de Foto/Avatar Sucinta -->
+            <div class="flex-shrink-0 w-12 h-14 border border-slate-700 rounded bg-slate-900/80 flex items-center justify-center text-slate-500 overflow-hidden relative">
+                <i class="fa-solid fa-user text-xl text-slate-600"></i>
+                <div id="tt-indicator-stripe" class="absolute bottom-0 inset-x-0 h-1 bg-amber-600/60"></div>
+            </div>
+            <!-- Detalhes do Parlamentar -->
+            <div class="flex-1 flex flex-col gap-1">
+                <div class="flex justify-between items-center gap-2 border-b border-slate-850 pb-1 mb-1 font-bold">
+                    <span id="tt-name" class="text-slate-100 truncate max-w-[130px]">Parlamentar</span>
+                    <span id="tt-uf" class="bg-black/40 border border-slate-800 text-amber-500 px-1.5 py-0.5 rounded text-[8px] font-mono">UF</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Partido:</span>
+                    <span id="tt-party" class="font-bold truncate max-w-[120px]">SIGLA</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Espectro:</span>
+                    <span id="tt-spectrum" class="font-bold text-slate-300">ESPECTRO</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Atividade:</span>
+                    <span id="tt-stress" class="font-bold text-slate-400 font-mono">ESTÁVEL</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé do Tooltip com link interno quando bloqueado -->
+        <div id="tt-action-row" class="hidden border-t border-slate-800/80 pt-2 mt-1 flex justify-between items-center">
+            <span class="text-[8px] text-amber-500/80 uppercase tracking-widest font-bold"><i class="fa-solid fa-lock text-[7px] mr-1"></i> SELECIONADO</span>
+            <button onclick="openParliamentaryProfile()" class="text-[9px] text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer transition bg-transparent border-none">
+                <span>Acessar parlamentar →</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Cores dos Partidos Tradicionais e Reais do Brasil (Suavizadas/Pastéis de Alto Padrão)
+        const CONFIG_PARTIES = {
+            'PT': { name: 'Partido dos Trabalhadores', color: '#db6767', spectrum: 'esquerda' }, // Coral Suave
+            'PSOL': { name: 'Partido Socialismo e Liberdade', color: '#e58080', spectrum: 'esquerda' }, // Vermelho Giz
+            'PCdoB': { name: 'Partido Comunista do Brasil', color: '#eb8ea2', spectrum: 'esquerda' }, // Rosa Suave
+            'PV': { name: 'Partido Verde', color: '#49a372', spectrum: 'esquerda' }, // Sálvia/Verde Pastel
+            'PSB': { name: 'Partido Socialista Brasileiro', color: '#e59563', spectrum: 'esquerda' }, // Terracota Suave
+            'PDT': { name: 'Partido Democrático Trabalhista', color: '#6682db', spectrum: 'esquerda' }, // Azul Acinzentado
+            'REDE': { name: 'Rede Sustentabilidade', color: '#55b5aa', spectrum: 'esquerda' }, // Verde Menta Fosco
+            
+            'MDB': { name: 'Movimento Democrático Brasileiro', color: '#5ab078', spectrum: 'centro' }, // Verde Bandeira Pastel
+            'PSD': { name: 'Partido Social Democrático', color: '#bca172', spectrum: 'centro' }, // Dourado Queimado
+            'PSDB': { name: 'Partido da Social Democracia Brasileira', color: '#5bb1db', spectrum: 'centro' }, // Azul Céu Suave
+            'Podemos': { name: 'Podemos', color: '#5ec2d1', spectrum: 'centro' }, // Turquesa Pastel
+            'Cidadania': { name: 'Cidadania', color: '#d8bd73', spectrum: 'centro' }, // Mostarda Suave
+            'Avante': { name: 'Avante', color: '#61cdd8', spectrum: 'centro' }, 
+            
+            'União': { name: 'União Brasil', color: '#628eeb', spectrum: 'direita' }, // Azul Linho
+            'PP': { name: 'Progressistas', color: '#6882be', spectrum: 'direita' }, // Azul Indigo Suave
+            'Republicanos': { name: 'Republicanos', color: '#637dbf', spectrum: 'direita' },
+            'PL': { name: 'Partido Liberal', color: '#578cc4', spectrum: 'direita' }, // Jeans Claro/Fosco
+            'Novo': { name: 'Partido Novo', color: '#e89e68', spectrum: 'direita' }, // Pêssego Suave
+            'PRD': { name: 'Partido Renovação Democrática', color: '#8b84d4', spectrum: 'direita' } // Lavanda Suave
+        };
+
+        const ORDER_SPECTRUM = [
+            'PSOL', 'PCdoB', 'PT', 'REDE', 'PV', 'PSB', 'PDT',
+            'MDB', 'PSD', 'Podemos', 'PSDB', 'Cidadania', 'Avante',
+            'União', 'PP', 'Republicanos', 'PRD', 'Novo', 'PL'
+        ];
+
+        const CHAMBER_COUNT = {
+            'PT': 68, 'PL': 99, 'União': 59, 'PP': 47, 'MDB': 44, 'PSD': 42, 'Republicanos': 41,
+            'Podemos': 18, 'PDT': 17, 'PSB': 14, 'PSOL': 13, 'PSDB': 12, 'PRD': 16,
+            'PCdoB': 7, 'PV': 6, 'Cidadania': 5, 'Novo': 4, 'REDE': 2, 'Avante': 3
+        };
+
+        const SENATE_COUNT = {
+            'PSD': 15, 'PL': 12, 'MDB': 11, 'PT': 9, 'União': 9, 'Podemos': 6, 'PP': 5,
+            'PSB': 4, 'Republicanos': 4, 'PDT': 3, 'PSDB': 2, 'Novo': 1
+        };
+
+        const STATES_LIST = [
+            'AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO'
+        ];
+
+        const DELEGATE_MASC_NAMES = ['Afonso', 'Alencar', 'Antônio', 'Carlos', 'Eduardo', 'Francisco', 'Geraldo', 'José', 'João', 'Luís', 'Marcos', 'Paulo', 'Ricardo', 'Roberto', 'Ronaldo', 'Sérgio', 'Valter'];
+        const DELEGATE_FEM_NAMES = ['Ana', 'Beatriz', 'Camila', 'Cristina', 'Eliane', 'Fernanda', 'Helena', 'Isabel', 'Júlia', 'Lúcia', 'Maria', 'Patrícia', 'Renata', 'Sandra', 'Simone', 'Teresa'];
+        const DELEGATE_SURNAMES = ['Silva', 'Santos', 'Oliveira', 'Souza', 'Rodrigues', 'Ferreira', 'Alves', 'Pereira', 'Lima', 'Gomes', 'Costa', 'Ribeiro', 'Martins', 'Carvalho', 'Rocha', 'Melo'];
+
+        let activeHouse = 'camara';
+        let currentTab = 'visualizacao';
+        let delegates = [];
+        let selectedPauta = 'reforma';
+        let isVoteRunning = false;
+        
+        // Controle de Seleção e Foco (Locked states)
+        let lockedDelegateId = null;
+
+        // Contexto de áudio para o Burburinho de Fundo e Efeitos de Votação
+        let audioCtx = null;
+        let ambientMuted = false;
+        let masterGain = null;
+        let crowdGainNode = null;
+        let voiceFilter1 = null;
+
+        function initAudioEngine() {
+            if (audioCtx) return;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Master Gain
+                masterGain = audioCtx.createGain();
+                masterGain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                masterGain.connect(audioCtx.destination);
+
+                // Nó de ganho específico para a ambiência do plenário
+                crowdGainNode = audioCtx.createGain();
+                crowdGainNode.gain.setValueAtTime(ambientMuted ? 0 : 0.15, audioCtx.currentTime);
+                crowdGainNode.connect(masterGain);
+
+                // GERAÇÃO PROCEDIMENTAL DE BURBURINHO DE VOZES REALISTA (Filtro Passa-Faixa de Frequência Vocal)
+                const bufferSize = 4 * audioCtx.sampleRate;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                let lastOut = 0.0;
+                for (let i = 0; i < bufferSize; i++) {
+                    const white = Math.random() * 2 - 1;
+                    // Filtro para gerar ruído rosa suave
+                    output[i] = (lastOut + (0.045 * white)) / 1.045;
+                    lastOut = output[i];
+                    output[i] *= 1.4;
+                }
+
+                // Criação do emissor de ruído de sala
+                const noiseSource = audioCtx.createBufferSource();
+                noiseSource.buffer = noiseBuffer;
+                noiseSource.loop = true;
+
+                // Filtro Passa-Faixa focado nas frequências de formante da fala humana (350Hz - 800Hz)
+                voiceFilter1 = audioCtx.createBiquadFilter();
+                voiceFilter1.type = 'bandpass';
+                voiceFilter1.frequency.setValueAtTime(450, audioCtx.currentTime); // Normal/Abafado
+                voiceFilter1.Q.setValueAtTime(1.1);
+
+                const voiceFilter2 = audioCtx.createBiquadFilter();
+                voiceFilter2.type = 'bandpass';
+                voiceFilter2.frequency.setValueAtTime(700, audioCtx.currentTime);
+                voiceFilter2.Q.setValueAtTime(1.4);
+
+                // Modulador LFO para flutuações naturais de conversas (elevação e queda do volume)
+                const volumeModulator = audioCtx.createOscillator();
+                volumeModulator.frequency.setValueAtTime(0.1, audioCtx.currentTime); 
+
+                const modGain = audioCtx.createGain();
+                modGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+                const sourceGain = audioCtx.createGain();
+                sourceGain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+
+                volumeModulator.connect(modGain);
+                modGain.connect(sourceGain.gain);
+
+                noiseSource.connect(voiceFilter1);
+                noiseSource.connect(voiceFilter2);
+                
+                voiceFilter1.connect(sourceGain);
+                voiceFilter2.connect(sourceGain);
+                
+                sourceGain.connect(crowdGainNode);
+
+                noiseSource.start(0);
+                volumeModulator.start(0);
+
+            } catch (err) {
+                console.warn("API de áudio bloqueada ou não suportada pelo navegador.");
+            }
+        }
+
+        function playSfx(freq, duration, type='sine') {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function toggleMuteMurmur() {
+            ambientMuted = !ambientMuted;
+            const icon = document.getElementById('volume-icon');
+            if (ambientMuted) {
+                icon.className = "fa-solid fa-volume-xmark text-slate-500 text-xs cursor-pointer";
+                if (crowdGainNode) crowdGainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+            } else {
+                icon.className = "fa-solid fa-volume-high text-amber-500 text-xs cursor-pointer";
+                initAudioEngine();
+                if (crowdGainNode) crowdGainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.5);
+            }
+        }
+
+        function triggerHUDMessage(msg, status = 'info') {
+            const container = document.getElementById('toast-container');
+            const alertBox = document.createElement('div');
+            
+            let colorClasses = 'border-slate-800 bg-[#090e18]/95 text-slate-200';
+            let icon = 'fa-circle-info text-amber-500';
+            
+            if (status === 'alert') {
+                colorClasses = 'border-rose-950 bg-rose-950/20 text-rose-400';
+                icon = 'fa-circle-exclamation';
+            } else if (status === 'success') {
+                colorClasses = 'border-emerald-800 bg-emerald-950/15 text-emerald-400';
+                icon = 'fa-circle-check';
+            }
+            
+            alertBox.className = `flex items-center gap-3 px-4 py-3 rounded border ${colorClasses} shadow-2xl pointer-events-auto transition-all duration-300 transform translate-x-12 opacity-0 text-[11px] uppercase tracking-wider font-bold`;
+            alertBox.innerHTML = `
+                <i class="fa-solid ${icon} text-sm"></i>
+                <span>${msg}</span>
+            `;
+            
+            container.appendChild(alertBox);
+            
+            setTimeout(() => {
+                alertBox.classList.remove('translate-x-12', 'opacity-0');
+            }, 15);
+            
+            setTimeout(() => {
+                alertBox.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => alertBox.remove(), 300);
+            }, 3500);
+        }
+
+        function generateDelegates(house) {
+            const list = [];
+            const counts = (house === 'camara') ? CHAMBER_COUNT : SENATE_COUNT;
+            let currentId = 1;
+
+            if (house === 'camara') {
+                for (const pCode of ORDER_SPECTRUM) {
+                    const amt = counts[pCode] || 0;
+                    for (let i = 0; i < amt; i++) {
+                        const isMasc = Math.random() > 0.45;
+                        const first = isMasc ? 
+                            DELEGATE_MASC_NAMES[Math.floor(Math.random() * DELEGATE_MASC_NAMES.length)] : 
+                            DELEGATE_FEM_NAMES[Math.floor(Math.random() * DELEGATE_FEM_NAMES.length)];
+                        const surname = DELEGATE_SURNAMES[Math.floor(Math.random() * DELEGATE_SURNAMES.length)];
+                        const name = `Dep. ${first} ${surname}`;
+
+                        list.push({
+                            id: currentId++,
+                            name: name,
+                            party: pCode,
+                            gender: isMasc ? 'M' : 'F',
+                            uf: STATES_LIST[Math.floor(Math.random() * STATES_LIST.length)],
+                            spectrum: CONFIG_PARTIES[pCode].spectrum,
+                            vote: null,
+                            stress: 'Atividade Parlamentar'
+                        });
+                    }
+                }
+            } else {
+                let statesAssigned = {};
+                STATES_LIST.forEach(uf => { statesAssigned[uf] = []; });
+
+                let partyPool = [];
+                for (const pCode in SENATE_COUNT) {
+                    for (let i = 0; i < SENATE_COUNT[pCode]; i++) {
+                        partyPool.push(pCode);
+                    }
+                }
+                while (partyPool.length < 81) partyPool.push('PSD');
+                partyPool.sort(() => Math.random() - 0.5);
+
+                let statePtr = 0;
+                partyPool.forEach(pCode => {
+                    const uf = STATES_LIST[statePtr];
+                    const isMasc = Math.random() > 0.45;
+                    const first = isMasc ? 
+                        DELEGATE_MASC_NAMES[Math.floor(Math.random() * DELEGATE_MASC_NAMES.length)] : 
+                        DELEGATE_FEM_NAMES[Math.floor(Math.random() * DELEGATE_FEM_NAMES.length)];
+                    const surname = DELEGATE_SURNAMES[Math.floor(Math.random() * DELEGATE_SURNAMES.length)];
+                    const name = `Sen. ${first} ${surname}`;
+
+                    statesAssigned[uf].push({
+                        id: currentId++,
+                        name: name,
+                        party: pCode,
+                        gender: isMasc ? 'M' : 'F',
+                        uf: uf,
+                        spectrum: CONFIG_PARTIES[pCode].spectrum,
+                        vote: null,
+                        stress: 'Atividade Parlamentar'
+                    });
+
+                    if (statesAssigned[uf].length === 3) statePtr++;
+                });
+
+                STATES_LIST.forEach(uf => {
+                    statesAssigned[uf].forEach(sen => list.push(sen));
+                });
+            }
+
+            return list;
+        }
+
+        function drawHemiciclo() {
+            const container = document.getElementById('seats-container');
+            container.innerHTML = '';
+
+            const total = delegates.length;
+            const cx = 600;
+            const cy = 610; 
+
+            let rows = [];
+            if (activeHouse === 'camara') {
+                // Afastamento das linhas e redução de contagem de assentos por linha para evitar qualquer colisão
+                rows = [
+                    { r: 275, count: 32 },
+                    { r: 330, count: 48 },
+                    { r: 385, count: 62 },
+                    { r: 440, count: 74 },
+                    { r: 495, count: 88 },
+                    { r: 550, count: 100 },
+                    { r: 605, count: 109 }
+                ];
+            } else {
+                rows = [
+                    { r: 280, count: 23 },
+                    { r: 410, count: 27 },
+                    { r: 540, count: 31 }
+                ];
+            }
+
+            const positions = [];
+            rows.forEach(row => {
+                const step = (354 - 186) / (row.count - 1);
+                for (let i = 0; i < row.count; i++) {
+                    const angleDeg = 186 + (i * step);
+                    const angleRad = (angleDeg * Math.PI) / 180;
+                    const x = cx + row.r * Math.cos(angleRad);
+                    const y = cy + row.r * Math.sin(angleRad);
+                    positions.push({ x, y, angle: angleDeg });
+                }
+            });
+
+            positions.sort((a, b) => a.angle - b.angle);
+
+            delegates.forEach((del, i) => {
+                if (i >= positions.length) return;
+                const pos = positions[i];
+                const party = CONFIG_PARTIES[del.party];
+                
+                const seatG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                // ROTACIONANDO A CADEIRA: orienta o topo da cadeira em direção ao centro de Mesa Diretora/Hemiciclo (cx, cy)
+                seatG.setAttribute("transform", `translate(${pos.x}, ${pos.y}) rotate(${pos.angle - 90})`);
+                seatG.setAttribute("class", "cursor-pointer select-none");
+                seatG.setAttribute("id", `seat-group-${del.id}`);
+
+                // Poltronas Maiores e Coloridas (Pintadas totalmente com a cor fosca e clássica do partido)
+                const chairBase = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                chairBase.setAttribute("d", "M -6.5,9 L -6.5,-3 Q -6.5,-6 0,-6 Q 6.5,-6 6.5,-3 L 6.5,9 Z");
+                chairBase.setAttribute("fill", party.color); // Preenchimento total sutil do partido
+                chairBase.setAttribute("stroke", "rgba(255,255,255,0.15)");
+                chairBase.setAttribute("stroke-width", "0.8");
+                chairBase.setAttribute("id", `base-${del.id}`);
+                seatG.appendChild(chairBase);
+
+                // Assento estático interno
+                const chairCushion = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                chairCushion.setAttribute("x", "-5.5");
+                chairCushion.setAttribute("y", "4");
+                chairCushion.setAttribute("width", "11");
+                chairCushion.setAttribute("height", "5");
+                chairCushion.setAttribute("rx", "1");
+                chairCushion.setAttribute("fill", "#050912");
+                chairCushion.setAttribute("fill-opacity", "0.35");
+                chairCushion.setAttribute("id", `cushion-${del.id}`);
+                seatG.appendChild(chairCushion);
+
+                // LED / Indicador de Presença (Posicionado agora ABAIXO da cadeira: y=14.5 com borda sutil)
+                const indicatorHead = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                indicatorHead.setAttribute("cx", "0");
+                indicatorHead.setAttribute("cy", "14.5");
+                indicatorHead.setAttribute("r", "3.2");
+                indicatorHead.setAttribute("fill", "#ffffff"); // Default Branco Puro
+                indicatorHead.setAttribute("stroke", "#ffffff");
+                indicatorHead.setAttribute("stroke-opacity", "0.6");
+                indicatorHead.setAttribute("stroke-width", "0.8");
+                indicatorHead.setAttribute("id", `indicator-${del.id}`);
+                indicatorHead.setAttribute("class", "seat-indicator");
+                seatG.appendChild(indicatorHead);
+
+                // Eventos de Hover
+                seatG.addEventListener('mouseenter', (event) => {
+                    updateTooltip(del, seatG, lockedDelegateId === del.id);
+                });
+
+                seatG.addEventListener('mouseleave', () => {
+                    if (lockedDelegateId !== null) {
+                        const lockedDel = delegates.find(d => d.id === lockedDelegateId);
+                        const lockedG = document.getElementById(`seat-group-${lockedDelegateId}`);
+                        if (lockedDel && lockedG) {
+                            updateTooltip(lockedDel, lockedG, true);
+                        }
+                    } else {
+                        hideTooltip();
+                    }
+                });
+
+                // Evento de Clique
+                seatG.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    selectDelegate(del, seatG);
+                });
+
+                container.appendChild(seatG);
+            });
+
+            updateOverallStats();
+            setupMesaListeners();
+        }
+
+        function updateTooltip(del, element, isLocked = false) {
+            const rect = element.getBoundingClientRect();
+            const tooltip = document.getElementById('hud-tooltip');
+            const party = CONFIG_PARTIES[del.party] || { name: 'Mesa Diretora', color: '#d97706', spectrum: 'CENTRO' };
+            
+            document.getElementById('tt-name').textContent = del.name;
+            document.getElementById('tt-uf').textContent = del.uf;
+            document.getElementById('tt-party').textContent = `${del.party} - ${party.name}`;
+            document.getElementById('tt-party').style.color = party.color;
+            document.getElementById('tt-spectrum').textContent = party.spectrum.toUpperCase();
+            document.getElementById('tt-stress').textContent = del.vote ? `VOTOU: ${del.vote}` : del.stress;
+            document.getElementById('tt-indicator-stripe').style.backgroundColor = party.color;
+
+            // Gerencia botões e links de ação do tooltip
+            const actionRow = document.getElementById('tt-action-row');
+            
+            if (isLocked) {
+                actionRow.classList.remove('hidden');
+                tooltip.style.pointerEvents = 'auto'; // Ativa clique no link do tooltip
+            } else {
+                actionRow.classList.add('hidden');
+                tooltip.style.pointerEvents = 'none'; // Desativa para evitar interceptação no hover comum
+            }
+
+            // Exibição e Posicionamento Estabilizado
+            tooltip.classList.remove('hidden');
+            const tWidth = tooltip.offsetWidth;
+            const tHeight = tooltip.offsetHeight;
+            
+            tooltip.style.left = `${window.scrollX + rect.left + (rect.width / 2) - (tWidth / 2)}px`;
+            tooltip.style.top = `${window.scrollY + rect.top - tHeight - 12}px`;
+        }
+
+        function hideTooltip() {
+            if (lockedDelegateId === null) {
+                document.getElementById('hud-tooltip').classList.add('hidden');
+            }
+        }
+
+        function selectDelegate(del, element) {
+            initAudioEngine();
+            playSfx(580, 0.08, 'sine');
+            
+            lockedDelegateId = del.id;
+            updateTooltip(del, element, true);
+
+            // Destaca a cadeira selecionada removendo stroke das outras
+            delegates.forEach(d => {
+                const base = document.getElementById(`base-${d.id}`);
+                if (base) {
+                    base.setAttribute("stroke", d.id === del.id ? "#ffffff" : "rgba(255,255,255,0.15)");
+                    base.setAttribute("stroke-width", d.id === del.id ? "1.8" : "0.8");
+                }
+            });
+
+            // Exibe e atualiza o card de detalhes inferior
+            const container = document.getElementById('details-card-container');
+            container.classList.remove('hidden');
+
+            const party = CONFIG_PARTIES[del.party];
+            document.getElementById('det-name').textContent = del.name;
+            document.getElementById('det-uf').textContent = del.uf;
+            document.getElementById('det-party').textContent = `${del.party} ? ${party.name}`;
+            document.getElementById('det-party').style.color = party.color;
+            document.getElementById('det-spectrum').textContent = party.spectrum;
+            document.getElementById('det-status').textContent = del.vote ? `VOTOU: ${del.vote}` : del.stress;
+            document.getElementById('details-bar').style.backgroundColor = party.color;
+        }
+
+        function clearSelectedDelegate() {
+            lockedDelegateId = null;
+            document.getElementById('hud-tooltip').classList.add('hidden');
+            document.getElementById('details-card-container').classList.add('hidden');
+
+            delegates.forEach(d => {
+                const base = document.getElementById(`base-${d.id}`);
+                if (base) {
+                    base.setAttribute("stroke", "rgba(255,255,255,0.15)");
+                    base.setAttribute("stroke-width", "0.8");
+                }
+            });
+        }
+
+        function handleSvgBackgroundClick(event) {
+            if (event.target.id === 'plenary-svg' || event.target.id === 'seats-container') {
+                clearSelectedDelegate();
+            }
+        }
+
+        // SIMULANDO ENDPOINT INTERNO DE CONSULTA AO DOSSIÊ
+        function getParliamentaryDossier(del) {
+            const seed = del.id || 7;
+            const pseudoRand = (max) => {
+                const x = Math.sin(seed) * 10000;
+                return Math.floor((x - Math.floor(x)) * max);
+            };
+
+            const totalAmendments = (10 + pseudoRand(25)).toFixed(1); // R$ 10M a R$ 35M
+            const health = (totalAmendments * (0.35 + pseudoRand(15)/100)).toFixed(1);
+            const edu = (totalAmendments * (0.2 + pseudoRand(15)/100)).toFixed(1);
+            const infra = (totalAmendments - parseFloat(health) - parseFloat(edu)).toFixed(1);
+
+            const isLeft = del.spectrum === 'esquerda';
+            const isRight = del.spectrum === 'direita';
+
+            const votes = [
+                { title: "Reforma Tributária Consumidor", vote: isLeft || pseudoRand(10) > 4 ? "SIM" : "NÃO", date: "2024" },
+                { title: "Privatizações & Concessões", vote: isRight || pseudoRand(10) > 6 ? "SIM" : "NÃO", date: "2024" },
+                { title: "Regulação do Arcabouço Fiscal", vote: isLeft || pseudoRand(10) > 3 ? "SIM" : "NÃO", date: "2023" },
+                { title: "Indicações de Cargos Técnicos", vote: isRight || pseudoRand(10) > 5 ? "SIM" : "NÃO", date: "2022" }
+            ];
+
+            return {
+                total: totalAmendments,
+                health,
+                edu,
+                infra,
+                votes
+            };
+        }
+
+        function openParliamentaryProfile() {
+            let del = null;
+            if (lockedDelegateId) {
+                del = delegates.find(d => d.id === lockedDelegateId);
+            }
+            
+            if (!del) {
+                const curName = document.getElementById('det-name').textContent;
+                if (curName.includes('Lira') || curName.includes('Pacheco')) {
+                    del = {
+                        name: curName,
+                        party: activeHouse === 'camara' ? 'PP' : 'PSD',
+                        uf: activeHouse === 'camara' ? 'AL' : 'MG',
+                        spectrum: 'centro',
+                        id: 999
+                    };
+                }
+            }
+
+            if (!del) return;
+
+            const party = CONFIG_PARTIES[del.party] || { name: 'Mesa Diretora', color: '#d97706', spectrum: 'centro' };
+            const dossier = getParliamentaryDossier(del);
+
+            // Carregando dados na nova interface exclusiva de perfil
+            document.getElementById('prof-name').textContent = del.name;
+            document.getElementById('prof-uf').textContent = del.uf;
+            document.getElementById('prof-party').textContent = `${del.party} ? ${party.name}`;
+            document.getElementById('prof-party').style.color = party.color;
+            document.getElementById('prof-spectrum').textContent = del.spectrum;
+            document.getElementById('profile-party-stripe').style.backgroundColor = party.color;
+
+            // Emendas
+            document.getElementById('prof-total-budget').textContent = `R$ ${dossier.total} Milhões`;
+            
+            const pHealth = (dossier.health / dossier.total * 100).toFixed(0);
+            const pEdu = (dossier.edu / dossier.total * 100).toFixed(0);
+            const pInfra = (dossier.infra / dossier.total * 100).toFixed(0);
+
+            document.getElementById('prof-budget-health-val').textContent = `R$ ${dossier.health}M (${pHealth}%)`;
+            document.getElementById('prof-budget-health-bar').style.width = `${pHealth}%`;
+
+            document.getElementById('prof-budget-edu-val').textContent = `R$ ${dossier.edu}M (${pEdu}%)`;
+            document.getElementById('prof-budget-edu-bar').style.width = `${pEdu}%`;
+
+            document.getElementById('prof-budget-infra-val').textContent = `R$ ${dossier.infra}M (${pInfra}%)`;
+            document.getElementById('prof-budget-infra-bar').style.width = `${pInfra}%`;
+
+            // Histórico de Votos
+            const historyContainer = document.getElementById('prof-vote-history-container');
+            historyContainer.innerHTML = '';
+            
+            dossier.votes.forEach(vt => {
+                const badgeColor = vt.vote === 'SIM' ? 'bg-emerald-950/80 border border-emerald-800 text-emerald-400' : 'bg-rose-950/80 border border-rose-800 text-rose-400';
+                const item = document.createElement('div');
+                item.className = 'bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2 justify-between';
+                item.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="font-bold text-slate-200">${vt.title}</span>
+                        <span class="text-[9px] text-slate-500 font-mono">${vt.date}</span>
+                    </div>
+                    <div class="flex justify-end mt-2">
+                        <span class="border px-3 py-1 rounded font-mono font-bold text-[10px] ${badgeColor}">${vt.vote}</span>
+                    </div>
+                `;
+                historyContainer.appendChild(item);
+            });
+
+            // Transição visual de telas
+            document.getElementById('view-plenary').classList.add('hidden');
+            document.getElementById('view-parliamentary-profile').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            playSfx(720, 0.15, 'triangle');
+        }
+
+        function closeParliamentaryProfile() {
+            document.getElementById('view-parliamentary-profile').classList.add('hidden');
+            document.getElementById('view-plenary').classList.remove('hidden');
+            playSfx(440, 0.1, 'sine');
+        }
+
+        function setupMesaListeners() {
+            const presName = (activeHouse === 'camara') ? 'Dep. Arthur Lira' : 'Sen. Rodrigo Pacheco';
+            const sec1Name = (activeHouse === 'camara') ? 'Dep. Luciano Bivar' : 'Sen. Rogério Marinho';
+            const sec2Name = (activeHouse === 'camara') ? 'Dep. Maria do Rosário' : 'Sen. Mara Gabrilli';
+
+            const mesaChairs = [
+                {
+                    id: 'chair-pres',
+                    name: presName,
+                    uf: (activeHouse === 'camara') ? 'AL' : 'MG',
+                    party: 'Mesa Diretora',
+                    spectrum: 'PRESIDÊNCIA',
+                    stress: 'Conduzindo Atividades do Congresso'
+                },
+                {
+                    id: 'chair-sec1',
+                    name: sec1Name,
+                    uf: (activeHouse === 'camara') ? 'PE' : 'RN',
+                    party: 'Mesa Diretora',
+                    spectrum: 'SECRETARIA',
+                    stress: 'Apoio aos Trabalhos da Mesa'
+                },
+                {
+                    id: 'chair-sec2',
+                    name: sec2Name,
+                    uf: (activeHouse === 'camara') ? 'RS' : 'SP',
+                    party: 'Mesa Diretora',
+                    spectrum: 'SECRETARIA',
+                    stress: 'Apoio aos Trabalhos da Mesa'
+                }
+            ];
+
+            mesaChairs.forEach(chair => {
+                const el = document.getElementById(chair.id);
+                if (!el) return;
+
+                el.addEventListener('mouseenter', () => {
+                    const rect = el.getBoundingClientRect();
+                    const tooltip = document.getElementById('hud-tooltip');
+                    
+                    document.getElementById('tt-name').textContent = chair.name;
+                    document.getElementById('tt-uf').textContent = chair.uf;
+                    document.getElementById('tt-party').textContent = chair.party;
+                    document.getElementById('tt-party').style.color = '#d97706'; 
+                    document.getElementById('tt-spectrum').textContent = chair.spectrum;
+                    document.getElementById('tt-stress').textContent = chair.stress;
+                    document.getElementById('tt-indicator-stripe').style.backgroundColor = '#d97706';
+                    document.getElementById('tt-action-row').classList.remove('hidden');
+
+                    tooltip.classList.remove('hidden');
+                    const tWidth = tooltip.offsetWidth;
+                    const tHeight = tooltip.offsetHeight;
+                    
+                    tooltip.style.left = `${window.scrollX + rect.left + (rect.width / 2) - (tWidth / 2)}px`;
+                    tooltip.style.top = `${window.scrollY + rect.top - tHeight - 12}px`;
+                });
+
+                el.addEventListener('mouseleave', () => {
+                    if (lockedDelegateId === null) {
+                        document.getElementById('hud-tooltip').classList.add('hidden');
+                    } else {
+                        const lockedDel = delegates.find(d => d.id === lockedDelegateId);
+                        const lockedG = document.getElementById(`seat-group-${lockedDelegateId}`);
+                        if (lockedDel && lockedG) {
+                            updateTooltip(lockedDel, lockedG, true);
+                        }
+                    }
+                });
+
+                el.addEventListener('click', () => {
+                    initAudioEngine();
+                    playSfx(440, 0.1, 'triangle');
+                    
+                    lockedDelegateId = null; // Mesa Diretora não tem ID numérico
+                    const container = document.getElementById('details-card-container');
+                    container.classList.remove('hidden');
+
+                    document.getElementById('det-name').textContent = chair.name;
+                    document.getElementById('det-uf').textContent = chair.uf;
+                    document.getElementById('det-party').textContent = chair.party;
+                    document.getElementById('det-party').style.color = '#d97706';
+                    document.getElementById('det-spectrum').textContent = chair.spectrum;
+                    document.getElementById('det-status').textContent = chair.stress;
+                    document.getElementById('details-bar').style.backgroundColor = '#d97706';
+                });
+            });
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            closeParliamentaryProfile();
+            
+            document.querySelectorAll('.tab-classic').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            const controlsPanel = document.getElementById('bottom-controls-panel');
+            const detailsCard = document.getElementById('details-card-container');
+            const seatsContainer = document.getElementById('seats-container');
+            
+            if (tabId === 'visualizacao') {
+                controlsPanel.classList.add('hidden');
+                if (lockedDelegateId !== null) {
+                    detailsCard.classList.remove('hidden');
+                } else {
+                    detailsCard.classList.add('hidden');
+                }
+                if (seatsContainer) {
+                    seatsContainer.classList.add('hide-indicators');
+                }
+                triggerHUDMessage("Modo de Inspeção Visual Ativo.", "info");
+            } else if (tabId === 'simulacao') {
+                controlsPanel.classList.remove('hidden');
+                detailsCard.classList.add('hidden'); 
+                if (seatsContainer) {
+                    seatsContainer.classList.remove('hide-indicators');
+                }
+                triggerHUDMessage("Modo de Simulação Legislativa Prontificado.", "info");
+            }
+        }
+
+        function switchHouse(house) {
+            if (isVoteRunning) {
+                triggerHUDMessage("Sessão travada! Aguarde a finalização dos votos.", "alert");
+                return;
+            }
+            activeHouse = house;
+            clearSelectedDelegate();
+            closeParliamentaryProfile();
+            
+            const btnC = document.getElementById('btn-camara');
+            const btnS = document.getElementById('btn-senado');
+            const ruleText = document.getElementById('rule-desc');
+            
+            if (house === 'camara') {
+                btnC.className = "px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all bg-slate-800 border border-slate-700 text-amber-500 shadow-sm";
+                btnS.className = "px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all text-slate-450 hover:text-white";
+                document.getElementById('plenary-title').textContent = "Plenário Ulysses Guimarães";
+                ruleText.innerHTML = "<strong>Câmara dos Deputados:</strong> Não possui poltronas fixas nominais. Os deputados se assentam informalmente sob uma lógica de espectro partidário (Esquerda &rarr; Centro &rarr; Direita).";
+            } else {
+                btnS.className = "px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all bg-slate-800 border border-slate-700 text-amber-500 shadow-sm";
+                btnC.className = "px-4 py-1.5 rounded text-xs font-bold tracking-wider transition-all text-slate-450 hover:text-white";
+                document.getElementById('plenary-title').textContent = "Plenário do Senado Federal";
+                ruleText.innerHTML = "<strong>Senado Federal:</strong> Cadeiras fixas e nominais distribuídas rigidamente por <strong>ordem alfabética dos Estados (Acre a Tocantins)</strong>. Os três senadores de cada UF sentam-se lado a lado.";
+            }
+
+            delegates = generateDelegates(house);
+            drawHemiciclo();
+            loadPautaData();
+
+            initAudioEngine();
+            if (audioCtx) playSfx(220, 0.1, 'triangle');
+        }
+
+        function updateOverallStats() {
+            const total = delegates.length;
+            document.getElementById('quorum-calc').textContent = `0/${total}`;
+            const majority = Math.floor(total / 2) + 1;
+            document.getElementById('majority-goal-lbl').textContent = majority;
+        }
+
+        const PRESETS_PAUTAS = {
+            'reforma': {
+                esq: 'SIM', cen: 'DIVIDIDO', dir: 'NÃO',
+                desc: 'Unificação de impostos federais, estaduais e municipais sobre consumo.'
+            },
+            'arcabouco': {
+                esq: 'SIM', cen: 'SIM', dir: 'NÃO',
+                desc: 'Diretrizes fiscais rígidas limitando gastos públicos ao crescimento real.'
+            },
+            'seguranca': {
+                esq: 'NÃO', cen: 'SIM', dir: 'SIM',
+                desc: 'Criação do Banco Nacional Unificado de Dados Policiais e Operacionais.'
+            },
+            'sustentavel': {
+                esq: 'SIM', cen: 'DIVIDIDO', dir: 'NÃO',
+                desc: 'Incentivo à transição ecológica industrial via subsídios ao biodiesel.'
+            }
+        };
+
+        function loadPautaData() {
+            selectedPauta = document.getElementById('pauta-select').value;
+            const data = PRESETS_PAUTAS[selectedPauta];
+
+            document.getElementById('pauta-desc').textContent = data.desc;
+
+            document.getElementById('stance-esq').textContent = data.esq;
+            document.getElementById('stance-esq').className = getBadgeStyle(data.esq);
+
+            document.getElementById('stance-cen').textContent = data.cen;
+            document.getElementById('stance-cen').className = getBadgeStyle(data.cen);
+
+            document.getElementById('stance-dir').textContent = data.dir;
+            document.getElementById('stance-dir').className = getBadgeStyle(data.dir);
+        }
+
+        function getBadgeStyle(stance) {
+            if (stance === 'SIM') return "bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded text-[8px] font-bold";
+            if (stance === 'NÃO') return "bg-rose-950/80 border border-rose-800 text-rose-400 px-1.5 py-0.5 rounded text-[8px] font-bold";
+            return "bg-yellow-950/80 border border-yellow-850 text-yellow-500 px-1.5 py-0.5 rounded text-[8px] font-bold";
+        }
+
+        function startVotacaoProcess() {
+            if (isVoteRunning) return;
+            initAudioEngine();
+            clearSelectedDelegate();
+            closeParliamentaryProfile();
+            
+            isVoteRunning = true;
+
+            document.getElementById('btn-fire-vote').disabled = true;
+            document.getElementById('btn-fire-vote').className = "opacity-50 cursor-not-allowed px-10 py-4 rounded text-xs font-bold uppercase tracking-widest w-full md:w-auto min-w-[220px] bg-slate-900 border border-slate-800 text-slate-500";
+            document.getElementById('system-status-indicator').textContent = "VOTAÇÃO EM CURSO";
+            document.getElementById('system-status-indicator').className = "text-[9px] bg-rose-950 text-rose-400 border border-rose-900 px-2.5 py-0.5 rounded font-mono animate-pulse";
+
+            const data = PRESETS_PAUTAS[selectedPauta];
+            
+            delegates.forEach(del => {
+                const stance = data[CONFIG_PARTIES[del.party].spectrum];
+                let finalVote = 'SIM';
+
+                if (stance === 'SIM') {
+                    finalVote = Math.random() > 0.15 ? 'SIM' : (Math.random() > 0.5 ? 'NÃO' : 'ABSTENÇÃO');
+                } else if (stance === 'NÃO') {
+                    finalVote = Math.random() > 0.15 ? 'NÃO' : (Math.random() > 0.5 ? 'SIM' : 'ABSTENÇÃO');
+                } else {
+                    const rnd = Math.random();
+                    if (rnd < 0.45) finalVote = 'SIM';
+                    else if (rnd < 0.88) finalVote = 'NÃO';
+                    else finalVote = 'ABSTENÇÃO';
+                }
+                del.vote = finalVote;
+            });
+
+            let currentIdx = 0;
+            const total = delegates.length;
+            const batchSize = Math.ceil(total / 18); 
+
+            let yesSum = 0;
+            let noSum = 0;
+            let absSum = 0;
+
+            if (crowdGainNode && !ambientMuted) {
+                crowdGainNode.gain.linearRampToValueAtTime(0.35, audioCtx.currentTime + 1.0);
+            }
+
+            // Gongo de Abertura de Sessão do Congresso
+            playSfx(440, 0.5, 'sine');
+            setTimeout(() => playSfx(554, 0.5, 'sine'), 120);
+
+            function processVotacaoBatch() {
+                if (currentIdx >= total) {
+                    finishSession(yesSum, noSum);
+                    return;
+                }
+
+                const endLimit = Math.min(currentIdx + batchSize, total);
+                for (let i = currentIdx; i < endLimit; i++) {
+                    const del = delegates[i];
+                    const indicator = document.getElementById(`indicator-${del.id}`);
+                    
+                    if (indicator) {
+                        let color = '#ffffff'; 
+                        let filterGlow = "none";
+                        
+                        // Atualiza com luzes de voto específicas, preservando a borda branca sutil
+                        if (del.vote === 'SIM') {
+                            color = '#10b981'; // Verde
+                            filterGlow = "url(#glow-led)";
+                            yesSum++;
+                        } else if (del.vote === 'NÃO') {
+                            color = '#ef4444'; // Vermelho
+                            filterGlow = "url(#glow-led)";
+                            noSum++;
+                        } else {
+                            color = '#e2e8f0'; // Branco (Abstenção)
+                            filterGlow = "url(#glow-led)";
+                            absSum++;
+                        }
+                        
+                        indicator.setAttribute("fill", color);
+                        indicator.style.filter = filterGlow;
+                    }
+                }
+
+                document.getElementById('score-yes').textContent = yesSum;
+                document.getElementById('score-no').textContent = noSum;
+                document.getElementById('score-abstain').textContent = absSum;
+                
+                const ratio = ((yesSum / total) * 100).toFixed(1);
+                document.getElementById('yes-bar').style.width = `${ratio}%`;
+                document.getElementById('quorum-calc').textContent = `${yesSum + noSum + absSum}/${total}`;
+
+                if (Math.random() > 0.25 && audioCtx) {
+                    playSfx(800 + Math.random() * 400, 0.03, 'sine');
+                }
+
+                currentIdx = endLimit;
+                setTimeout(processVotacaoBatch, 90);
+            }
+
+            processVotacaoBatch();
+        }
+
+        function finishSession(yes, no) {
+            isVoteRunning = false;
+            
+            document.getElementById('btn-fire-vote').disabled = false;
+            document.getElementById('btn-fire-vote').className = "btn-classic-gavel px-10 py-4 rounded text-xs font-bold uppercase tracking-widest w-full md:w-auto min-w-[220px]";
+            document.getElementById('system-status-indicator').textContent = "SESSÃO ENCERRADA";
+            document.getElementById('system-status-indicator').className = "text-[9px] bg-slate-950 text-amber-500 border border-slate-800 px-2.5 py-0.5 rounded font-mono";
+
+            const total = delegates.length;
+            const majorityRequired = Math.floor(total / 2) + 1;
+            const passed = yes >= majorityRequired;
+
+            if (crowdGainNode && !ambientMuted) {
+                crowdGainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 1.5);
+            }
+
+            if (passed) {
+                triggerHUDMessage(`Matéria APROVADA por ${yes} votos contra ${no}!`, 'success');
+                playSfx(523, 0.25, 'sine');
+                setTimeout(() => playSfx(659, 0.35, 'sine'), 100);
+            } else {
+                triggerHUDMessage(`Matéria REJEITADA. Foram obtidos apenas ${yes} de ${majorityRequired} requeridos.`, 'alert');
+                playSfx(190, 0.5, 'triangle');
+            }
+        }
+
+        function resetPlenaryState() {
+            if (isVoteRunning) return;
+            
+            clearSelectedDelegate();
+            closeParliamentaryProfile();
+
+            delegates.forEach(del => {
+                del.vote = null;
+                const indicator = document.getElementById(`indicator-${del.id}`);
+                if (indicator) {
+                    indicator.setAttribute("fill", "#ffffff"); // Retorna ao Default Branco Puro
+                    indicator.style.filter = "none";
+                }
+            });
+
+            document.getElementById('score-yes').textContent = "0";
+            document.getElementById('score-no').textContent = "0";
+            document.getElementById('score-abstain').textContent = "0";
+            document.getElementById('yes-bar').style.width = "0%";
+            document.getElementById('quorum-calc').textContent = `0/${delegates.length}`;
+            
+            document.getElementById('system-status-indicator').textContent = "SESSÃO REINICIADA";
+            document.getElementById('system-status-indicator').className = "text-[9px] bg-slate-950 text-slate-400 border border-slate-800 px-2.5 py-0.5 rounded font-mono";
+
+            triggerHUDMessage("Painel eletrônico do plenário redefinido.", "info");
+            if (audioCtx) playSfx(300, 0.08, 'sine');
+        }
+
+        window.onload = function() {
+            delegates = generateDelegates('camara');
+            drawHemiciclo();
+            loadPautaData();
+            
+            switchTab('visualizacao');
+        };
+    </script>
+</body>
+</html>
