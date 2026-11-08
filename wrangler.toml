@@ -1,0 +1,15 @@
+name = "olhar-presenca"
+main = "worker.js"
+compatibility_date = "2026-04-07"
+
+[[durable_objects.bindings]]
+name = "SALA"
+class_name = "Sala"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Sala"]
+
+[vars]
+# endereços do site que podem conectar (separe por vírgula, sem barra no final)
+ALLOWED_ORIGINS = "https://olhardobrasil.pages.dev"
