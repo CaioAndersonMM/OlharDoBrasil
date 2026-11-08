@@ -66,7 +66,7 @@ select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--li
 footer{color:var(--mut);font-size:12px;padding:20px 0 36px;line-height:1.6;border-top:1px solid var(--line)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>:root{color-scheme:light}html,body{background:#fff}body,h1,.tab,h3,select,.sechd b,.stat strong,.vd,svg text{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif !important}h1{font-weight:800;letter-spacing:-.035em}h1 em{font-style:normal}h3{font-weight:700;font-size:20px}.tab{font-weight:600;font-size:16px}.stat strong{font-weight:700}.vd{font-weight:500;font-size:16px}</style>
+<style>:root{color-scheme:light}html,body{background:#fff}body,h1,.tab,h3,select,.sechd b,.stat strong,.vd,svg text{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif !important}h1{font-weight:800;letter-spacing:-.035em}h1 em{font-style:normal}h3{font-weight:700;font-size:20px}.tab{font-weight:600;font-size:16px}.stat strong{font-weight:700}.vd{font-weight:500;font-size:16px}.meter .a{position:absolute;left:0;top:0;bottom:0;border-radius:7px 0 0 7px}.meter .n{position:absolute;right:0;top:0;bottom:0;border-radius:0 7px 7px 0}.mk{width:4px;margin-left:-2px;top:-8px;bottom:-8px}.stat{justify-content:space-between}.stat>span:nth-child(2){text-align:center}.stat>span:nth-child(3){text-align:right}.pv{border-top:1px solid var(--line);padding:28px 0 8px}.badge{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--y);color:#2a2100;border-radius:999px;padding:3px 10px;margin-left:12px;font-weight:700;vertical-align:middle}.pvgrid{display:grid;grid-template-columns:1fr 1fr;gap:34px}@media (max-width:820px){.pvgrid{grid-template-columns:1fr}}.prow{display:grid;grid-template-columns:110px 1fr 44px;gap:10px;align-items:center;font-size:13px;margin:7px 0}.pbar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.pbar i{display:block;height:100%;background:var(--g);border-radius:5px}.btn{background:var(--b);color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:600;cursor:pointer;font-size:14px;margin-top:14px}.step{display:inline-block;border:1px dashed var(--line);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--mut)}.step b{color:var(--g);margin-right:4px}[hidden]{display:none !important}.tabs{justify-content:center;align-items:center;gap:44px}.tab.dia{padding:2px 8px 8px;display:flex;flex-direction:column;align-items:center}.dm{width:46px;height:46px;border-radius:12px;transform:rotate(45deg);background:linear-gradient(135deg,var(--g),#0a7e6b 55%,var(--b));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px rgba(0,39,118,.22);margin:12px 0 14px;transition:box-shadow .2s}.dm i{transform:rotate(-45deg);font-style:normal;color:#fff;font-weight:800;font-size:16px}.tab.dia em{font-style:normal;font-size:12px;font-weight:600;color:var(--ink);letter-spacing:.04em}.tab.dia.on:after{display:none}.tab.dia.on .dm{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--y)}.tab.dia:hover .dm{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--g)}.cap{align-items:center}.cap button{background:none;border:1px solid transparent;border-radius:999px;padding:7px 16px;font:inherit;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);cursor:pointer}.cap button:hover{border-color:var(--line);color:var(--ink)}.cap button.on{background:var(--b);color:#fff}@media (max-width:560px){.tab small{display:none}.tabs{gap:18px}.tab{font-size:14px}}</style>
 </head>
 <body>
 <div class="stripe"></div>
@@ -77,10 +77,10 @@ footer{color:var(--mut);font-size:12px;padding:20px 0 36px;line-height:1.6;borde
 <p class="lead">Cada cadeira do Legislativo em um só lugar. Filtre por partido, conheça a Mesa e simule votações.</p></div>
 <svg class="art" viewBox="0 0 220 150" aria-hidden="true"><polygon points="110,4 216,75 110,146 4,75" fill="none" stroke="#009c3b" stroke-width="3"/><polygon points="110,22 190,75 110,128 30,75" fill="#f2b705"/><circle cx="110" cy="75" r="33" fill="#002776"/><path d="M80 70 Q112 60 141 82" stroke="#fff" stroke-width="5" fill="none"/></svg>
 </div>
-<div class="tabs"><button class="tab on" data-c="cam">Câmara dos Deputados<small>513</small></button><button class="tab" data-c="sen">Senado Federal<small>54 eleitos em 2026</small></button></div>
+<div class="tabs"><button class="tab on" data-c="cam">Câmara dos Deputados<small>513</small></button><button class="tab dia" data-c="pv" aria-label="Previsão com IA"><span class="dm"><i>IA</i></span><em>Previsão</em></button><button class="tab" data-c="sen">Senado Federal<small>54 eleitos em 2026</small></button></div>
 <div class="stage"><svg id="svg" viewBox="0 0 800 450" role="img" aria-label="Plenário"></svg>
-<div class="spec" id="spec"></div><div class="cap"><span>Esquerda</span><span>Centro</span><span>Direita</span></div>
-<p class="hint">Passe o mouse (ou toque) em uma cadeira ou na Mesa Diretora.</p></div>
+<div class="spec" id="spec"></div><div class="cap"><button data-g="e">Esquerda</button><button data-g="c">Centro</button><button data-g="d">Direita</button></div>
+<p class="hint">Passe o mouse (ou toque) em uma cadeira ou na Mesa Diretora. Clique em Esquerda, Centro ou Direita para destacar o campo (classificação aproximada).</p></div>
 <div class="grid">
 <div><div class="sechd"><b>01</b><h3>Bancadas</h3></div><h4>Federações</h4><div class="chips" id="feds"></div><h4>Partidos</h4><div class="chips" id="parts"></div><button class="reset" id="rst">Limpar seleção</button></div>
 <div><div class="sechd"><b>02</b><h3>Simulador de votação</h3></div>
@@ -88,9 +88,14 @@ footer{color:var(--mut);font-size:12px;padding:20px 0 36px;line-height:1.6;borde
 <div class="who"><button class="a on" data-w="0" id="w0"></button><button class="n" data-w="1" id="w1"></button></div>
 <div class="note" style="margin:0">Escolha o lado e clique em partidos, federações ou na barra de espectro.</div>
 <div class="meter"><div class="a" id="ba"></div><div class="n" id="bn"></div><span class="mk" id="mk"></span></div>
-<div class="stat"><span><strong id="va">0</strong><span id="la"></span></span><span><strong id="vn">0</strong><span id="ln"></span></span><span><strong id="th">0</strong>necessários</span></div>
+<div class="stat"><span><strong id="va">0</strong><span id="la"></span></span><span><strong id="th">0</strong>linha de aprovação</span><span><strong id="vn">0</strong><span id="ln"></span></span></div>
 <div class="vd" id="vd"></div></div>
 </div>
+<div class="pv" id="pvtab" hidden style="border-top:0;padding-top:24px"><div class="sechd"><b>IA</b><h3>Previsão de votos com IA<span class="badge">Beta · demonstração</span></h3></div>
+<div class="pvgrid"><div><select id="pj"></select><div class="note" id="pn"></div><div class="vd" id="psum"></div><button class="btn" id="papply">Aplicar previsão ao simulador</button>
+<div class="note" style="margin-top:14px">Modelo de IA que analisa como cada parlamentar e cada partido votou em projetos anteriores, cruza com o tema do PL e estima a chance de cada voto. Beta: os PLs abaixo são fictícios e os números são ilustrativos, até a ligação com os dados reais de votações.</div></div>
+<div id="prows"></div></div>
+<h4>Como a IA analisa cada PL</h4><div class="chips"><span class="step"><b>1</b>Coletar votações (dados abertos)</span><span class="step"><b>2</b>Ler o histórico de cada parlamentar e de cada partido</span><span class="step"><b>3</b>Treinar o modelo</span><span class="step"><b>4</b>Prever voto de cada parlamentar</span><span class="step"><b>5</b>Validar com votações passadas</span></div></div>
 <footer>Composição conforme infográfico informado (eleitos 2026). Nomes e UFs nas cadeiras são provisórios, a conectar às APIs de dados abertos. Presidentes das Casas: mandato 2025–2026, com nova eleição prevista para fevereiro de 2027. No Senado, as 27 cadeiras não renovadas em 2026 não aparecem no mapa. Simulação educativa, com presença total.</footer>
 </div>
 <div id="tip"></div>
@@ -109,7 +114,7 @@ const SC=[
 {n:'Proposta de Emenda à Constituição (PEC)',k:'b',l:['A favor','Contra'],t:'pec',note:'Três quintos dos membros, em dois turnos, em cada Casa.'}];
 const UF='AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
 const $=s=>document.querySelector(s),svg=$('#svg'),tip=$('#tip');
-let cur='cam',seats=[],bl={},who=0,sc=0,SCOL=['#009c3b','#f2b705'];
+let cur='cam',seats=[],bl={},who=0,sc=0,SCOL=['#009c3b','#f2b705'];const GRP={e:['PSOL','Rede','PT','PCdoB','PV','PSB','PDT'],c:['Solidariedade','Podemos','PSD','MDB','PSDB','Avante'],d:['União Brasil','PP','Republicanos','Novo','PRD','Missão','PL']};let grp=null;
 $('#sc').innerHTML=SC.map((s,i)=>`<option value="${i}">${s.n}</option>`).join('');
 function build(){
  const c=CH[cur],rad=[],cnt=[];let sr=0,s=0;
@@ -139,7 +144,7 @@ function paint(){
  const st=document.documentElement.style;st.setProperty('--ca',SCOL[0]);st.setProperty('--cn',SCOL[1]);st.setProperty('--cnt',S.k==='e'?'#fff':'#2a2100');
  for(const p in bl){(bl[p]?n+=c.d[p]||0:a+=c.d[p]||0)}
  const any=Object.keys(bl).length>0;
- svg.querySelectorAll('.s').forEach((e,i)=>{const b=bl[seats[i].p];e.style.opacity=!any||b!==undefined?1:.13;
+ svg.querySelectorAll('.s').forEach((e,i)=>{const b=bl[seats[i].p];e.style.opacity=!any||b!==undefined?1:.13;const gi=!grp||GRP[grp].includes(seats[i].p);e.children[2].setAttribute('fill',gi?COL[seats[i].p]:'#d3d9e5');e.children[3].setAttribute('opacity',gi?.3:.06);
   const ro=e.children[0],rw=e.children[1],on=b!==undefined;ro.setAttribute('display',on?'':'none');rw.setAttribute('display',on?'':'none');if(on)ro.setAttribute('fill',SCOL[b])});
  document.querySelectorAll('.chip').forEach(e=>{const k=e.dataset.p;
   const ps=k.startsWith('F:')?FED[k.slice(2)].filter(p=>c.d[p]):[k];const v=ps.length&&ps.every(p=>bl[p]===bl[ps[0]])?bl[ps[0]]:undefined;
@@ -152,13 +157,14 @@ function paint(){
  if(!any)m='Monte os blocos para ver o resultado.';
  else if(S.k==='e')m=a>=t?`${S.l[0]} eleita no 1º turno com ${a} votos.`:n>=t?`${S.l[1]} eleita no 1º turno com ${n} votos.`:`Ninguém atinge ${t}: haveria 2º turno entre as duas candidaturas.`;
  else m=a>=t?`Aprovado com ${a} votos (mínimo ${t}).`:`Não aprovado: faltam ${t-a} votos a favor${n>=t?'; o lado contrário tem maioria.':'.'}`;
- $('#vd').textContent=m;
+ $('#vd').textContent=m;renderPred();document.querySelectorAll('.cap button').forEach(b=>b.classList.toggle('on',b.dataset.g===grp));
 }
 document.addEventListener('click',e=>{
  const t=e.target.closest('.tab');
- if(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));cur=t.dataset.c;build();return}
+ if(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));const pvm=t.dataset.c==='pv';document.querySelector('.stage').hidden=pvm;document.querySelector('.grid').hidden=pvm;$('#pvtab').hidden=!pvm;if(!pvm){cur=t.dataset.c;grp=null;build()}else renderPred();return}
  const w=e.target.closest('[data-w]');if(w){who=+w.dataset.w;paint();return}
- if(e.target.id==='rst'){bl={};paint();return}
+ const gb=e.target.closest('[data-g]');if(gb){grp=grp===gb.dataset.g?null:gb.dataset.g;paint();return}
+ if(e.target.id==='rst'){bl={};grp=null;paint();return}
  const ch=e.target.closest('[data-p]');if(!ch)return;
  const k=ch.dataset.p,ps=k.startsWith('F:')?FED[k.slice(2)].filter(p=>CH[cur].d[p]):[k];
  const all=ps.every(p=>bl[p]===who);ps.forEach(p=>all?delete bl[p]:bl[p]=who);paint();
@@ -171,6 +177,16 @@ function show(e){const g=e.target.closest('.s'),m=e.target.closest('.mesa');
  tip.style.display='block';tip.style.left=Math.max(8,Math.min(e.clientX+14,innerWidth-262))+'px';tip.style.top=(e.clientY+14)+'px'}
 svg.addEventListener('mousemove',show);svg.addEventListener('click',show);
 svg.addEventListener('mouseleave',()=>tip.style.display='none');
+const PJ=[{n:'Programa social ampliado (exemplo)',pv:.55,dir:1,t:'Tende a atrair partidos mais à esquerda do plenário.'},{n:'Redução de impostos (exemplo)',pv:.5,dir:-1,t:'Tende a atrair partidos mais à direita do plenário.'},{n:'Mais verba para segurança pública (exemplo)',pv:.4,dir:-1,t:'Apoio maior à direita, com adesão parcial ao centro.'},{n:'Proposta de consenso amplo (exemplo)',pv:.5,dir:0,t:'Quase todos os partidos tendem a apoiar.'}];
+PJ.length=0;PJ.push({n:'PL 1001/2027 · Transferência de renda ampliada (fictício)',pv:.55,dir:1,t:'Exemplo fictício: tende a ter mais apoio à esquerda e ao centro-esquerda.'},{n:'PL 1002/2027 · Redução de impostos para pequenas empresas (fictício)',pv:.35,dir:-1,t:'Exemplo fictício: tende a ter apoio amplo do centro à direita.'},{n:'PL 1003/2027 · Penas maiores para crimes patrimoniais (fictício)',pv:.5,dir:-1,t:'Exemplo fictício: apoio maior à direita, com adesão parcial do centro.'},{n:'PL 1004/2027 · Fundo nacional de energia limpa (fictício)',pv:.62,dir:1,t:'Exemplo fictício: apoio maior à esquerda e ao centro, rejeição à direita.'},{n:'PL 1005/2027 · Dia Nacional da Educação Digital (fictício)',pv:.5,dir:0,t:'Exemplo fictício: tema de consenso, quase todos os partidos tendem a apoiar.'});let pji=0;$('#pj').innerHTML=PJ.map((p,i)=>`<option value="${i}">${p.n}</option>`).join('');$('#pj').onchange=e=>{pji=+e.target.value;renderPred()};
+function predict(j,chamber){const o={};for(const p in chamber.d){const x=ORDER.indexOf(p)/(ORDER.length-1);const z=j.dir===0?2:j.dir*(j.pv-x)*8;o[p]=Math.min(.97,Math.max(.03,1/(1+Math.exp(-z))))}return o}
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x))}
+function renderPred(){const c=CH.cam,j=PJ[pji],pr=predict(j,c);let E=0,V=0;
+ for(const p in pr){const n=c.d[p];E+=n*pr[p];V+=n*n*pr[p]*(1-pr[p])}
+ const sd=Math.sqrt(V),t=c.th.p,pa=Math.round(50*(1+erf((E-t+.5)/(sd||1)/Math.SQRT2)));
+ $('#pn').textContent=j.t;$('#psum').textContent=`Previsão: cerca de ${Math.round(E)} votos a favor (±${Math.round(sd)}). Chance de aprovação: ${pa}%.`;
+ $('#prows').innerHTML=Object.keys(c.d).sort((a,b)=>c.d[b]-c.d[a]).map(p=>`<div class="prow"><span>${p} <b style="color:var(--mut)">${c.d[p]}</b></span><div class="pbar"><i style="width:${Math.round(pr[p]*100)}%"></i></div><b>${Math.round(pr[p]*100)}%</b></div>`).join('')}
+$('#papply').onclick=()=>{document.querySelector('.tab[data-c=cam]').click();sc=1;$('#sc').value=1;const pr=predict(PJ[pji],CH.cam);bl={};for(const p in pr){if(pr[p]>=.6)bl[p]=0;else if(pr[p]<=.4)bl[p]=1}paint();document.querySelector('.stage').scrollIntoView({behavior:'smooth'})};
 build();
 </script>
 </body>
