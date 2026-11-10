@@ -194,15 +194,18 @@ svg.addEventListener('click',e=>{const g=e.target.closest('.s');if(!g)return;con
 $('#ficha .x').onclick=()=>{$('#ficha').hidden=true};
 const REAL={};
 function slugJ(t){return t.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'x'}
+const ALIAS={'UNIÃO':'União Brasil','UNIAO':'União Brasil','PODE':'Podemos','PC DO B':'PCdoB','PCDOB':'PCdoB','MISSÃO':'Missão','MISSAO':'Missão','CIDADANIA':'Cidadania'};
+const EXTRA=['#c97b3d','#6a8caf','#b07fc4','#7aa874','#d1a23f','#4f9aa0'];let ex=0;
+const canon=p=>{const u=(p||'').trim().toUpperCase();if(ALIAS[u])return ALIAS[u];for(const k in COL)if(k.toUpperCase()===u)return k;return(p||'').trim()||'S/Partido'};
 async function loadReal(){
  const ld=u=>fetch(u,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).catch(()=>null);
  const [a,b]=await Promise.all([ld('data/camara.json'),ld('data/senado.json')]);
  let ok=false;
  for(const [k,arr] of [['cam',a],['sen',b]]){if(!Array.isArray(arr)||arr.length<20)continue;ok=true;
   const d={};
-  arr.forEach(m=>{m.link='parlamentares/'+slugJ(m.nome)+'-'+m.casa[0].toLowerCase()+m.id+'.html';m.nome=m.nome.replace(/ (Da|De|Do|Dos|Das|E) /g,x=>x.toLowerCase());
-   if(!COL[m.partido]){COL[m.partido]='#9aa3b2';ORDER.splice(ORDER.indexOf('Uni\u00e3o Brasil'),0,m.partido)}d[m.partido]=(d[m.partido]||0)+1});
-  CH[k].d=d;CH[k].tot=arr.length;REAL[k]=arr;
+  arr.forEach(m=>{m.partido=canon(m.partido);m.link='parlamentares/'+slugJ(m.nome)+'-'+m.casa[0].toLowerCase()+m.id+'.html';m.nome=m.nome.replace(/ (Da|De|Do|Dos|Das|E) /g,x=>x.toLowerCase());
+   if(!COL[m.partido]){COL[m.partido]=EXTRA[ex++%EXTRA.length];ORDER.splice(ORDER.indexOf('Uni\u00e3o Brasil'),0,m.partido)}d[m.partido]=(d[m.partido]||0)+1});
+  CH[k].d=d;CH[k].tot=arr.length;REAL[k]=arr;if(!GRP.c.includes('Cidadania'))GRP.c.push('Cidadania');
   if(k==='sen'&&arr.length>60){CH.sen.rows=4;CH.sen.r0=170;CH.sen.r1=380}
   document.querySelector('.tab[data-c='+k+'] small').textContent=k==='cam'?arr.length:arr.length+' senadores'}
  if(ok){const f=document.querySelector('footer');f.childNodes[0].nodeValue='Dados: eleitos em 2026 (TSE) e senadores em exerc\u00edcio (Senado Federal), conforme a composi\u00e7\u00e3o que toma posse em fevereiro de 2027. Presidentes das Casas: mandato 2025\u20132026. Simula\u00e7\u00e3o educativa, com presen\u00e7a total. ';build()}
