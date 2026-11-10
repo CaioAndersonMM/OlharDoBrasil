@@ -1,0 +1,53 @@
+{
+ "executado_em": "2026-11-09",
+ "camara_votacoes_testadas": [
+  {
+   "id": "2641546-7",
+   "data": "2026-11-05",
+   "descricao": "Aprovado o parecer na Comissão Mista",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2412504-64",
+   "data": "2026-11-05",
+   "descricao": "Aprovadas as Subemendas nºs 1 e 2 ao Substitutivo da Comissão de Cultura.",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2412504-60",
+   "data": "2026-11-05",
+   "descricao": "Aprovado o Substitutivo ao Projeto de Lei nº 5.974, de 2023, da Comissão de Defesa dos Direitos das Pessoas com Deficiên",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2637478-28",
+   "data": "2026-11-05",
+   "descricao": "Aprovada a Redação Final assinada pelo relator, Dep. Hildo Rocha (MDB-MA).",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2637478-26",
+   "data": "2026-11-05",
+   "descricao": "Aprovado o Projeto de Lei nº 3.507, de 2026.",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2238560-44",
+   "data": "2026-11-05",
+   "descricao": "Aprovada a Emenda de Redação.",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2238560-42",
+   "data": "2026-11-05",
+   "descricao": "Aprovado o Projeto de Lei nº 565, de 2020.",
+   "votos_individuais": 0
+  },
+  {
+   "id": "2389679-29",
+   "data": "2026-11-05",
+   "descricao": "Aprovada a Redação Final, assinada pelo relator, Dep. Aécio Neves (PSDB/MG).",
+   "votos_individuais": 0
+  }
+ ]
+}

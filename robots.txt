@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://olhardobrasil.caioandersonmartins.workers.dev/sitemap.xml
