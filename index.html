@@ -149,7 +149,7 @@ function build(){
  bl={};paint();
 }
 function paint(){
- const c=CH[cur],S=SC[sc],t=c.th[S.t],tot=c.tot;let a=0,n=0;
+ const c=CH[cur],S=SC[sc],t=c.th[S.t],tot=cur==='sen'?81:c.tot;let a=0,n=0;
  SCOL=S.k==='e'?['#e11d2e','#1747d6']:['#009c3b','#f2b705'];
  const st=document.documentElement.style;st.setProperty('--ca',SCOL[0]);st.setProperty('--cn',SCOL[1]);st.setProperty('--cnt',S.k==='e'?'#fff':'#2a2100');
  for(const p in bl){(bl[p]?n+=c.d[p]||0:a+=c.d[p]||0)}
@@ -161,7 +161,7 @@ function paint(){
   e.classList.toggle('a',v===0);e.classList.toggle('n',v===1);e.classList.toggle('sel',ps.length>0&&grp.size>0&&ps.every(p=>[...grp].some(k=>GRP[k].includes(p))))});
  $('#w0').textContent=S.l[0];$('#w1').textContent=S.l[1];$('#w0').className='a'+(who===0?' on':'');$('#w1').className='n'+(who===1?' on':'');
  $('#la').textContent=S.l[0];$('#ln').textContent=S.l[1];
- $('#note').textContent=S.note;$('#th').textContent=t;$('#mk').style.left=(t/tot*100)+'%';
+ $('#note').textContent=S.note+(cur==='sen'?' No Senado, a barra considera as 81 cadeiras; as 27 não renovadas em 2026 ainda não estão no mapa.':'');$('#th').textContent=t;$('#mk').style.left=(t/tot*100)+'%';
  $('#va').textContent=a;$('#vn').textContent=n;$('#ba').style.width=(a/tot*100)+'%';$('#bn').style.width=(n/tot*100)+'%';
  let m;
  if(!any)m='Monte os blocos para ver o resultado.';
